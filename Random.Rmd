@@ -1,0 +1,430 @@
+---
+title: "garbage"
+author: "Jack Conner"
+date: "2023-10-05"
+output: html_document
+---
+```{r}
+716 %/% 7
+716 %% 7
+high_school_1600_times <- c(306.21, 299.51, 298.98, 294.35, 279.5, 277.8, 287, 282.31, 275.9, 276.69, 272.84, 271.45, 272, 277.97, 268.21, 267.82, 275.37)
+
+mean(high_school_1600_times)
+freshman_1600_times <- high_school_1600_times[1:4]
+sophomore_1600_times <- high_school_1600_times[5]
+junior_1600_times <- high_school_1600_times[6:9]
+senior_1600_times <- high_school_1600_times[10:17]
+avg_freshman_1600 <- mean(freshman_1600_times)
+avg_sophomore_1600 <- mean(sophomore_1600_times)
+avg_junior_1600 <- mean(junior_1600_times)
+avg_senior_1600 <- mean(senior_1600_times)
+
+max(high_school_1600_times)
+min(high_school_1600_times)
+
+high_school_1500_conversion <- high_school_1600_times - 20
+high_school_1500_conversion
+
+senior_1500_times <- high_school_1500_conversion[10:17]
+mean(senior_1500_times)
+
+avg_freshman_1600 - avg_sophomore_1600
+avg_sophomore_1600 - avg_junior_1600
+avg_junior_1600 - avg_senior_1600
+avg_freshman_1600 - avg_senior_1600
+avg_junior_1600
+
+length(junior_1600_times)
+length(senior_1600_times)
+
+senior_1600_times / 4
+
+m1data <- c(1, 2, 7, 4, 3, 3, 9, 12, 0, 12, 4, 35)
+
+matrix_1 <- matrix(data = m1data, nrow = 3, ncol = 4)
+matrix_1
+
+c
+-2:0
+pi
+TRUE
+log(c(2, 4, 5)) - exp(3)
+1:3 + 2:5
+x <- c(2, 3, 4, 5, 5)
+
+
+
+x <- c(70, 4, "NA")
+logical(length(x))
+```
+
+```{r}
+num_orders <- matrix(1:100, nrow = 10, ncol = 10)
+food_items <- c("Burrito", "Taco", "Quesedilla")
+food_items <- factor(food_items)
+food_items <- matrix(c("Burrito", "Taco", "Quesedilla"), nrow = 10, ncol = 10)
+tapply(num_orders, food_items, sum)
+```
+
+```{r}
+class(parks_df)
+X <- matrix(1:4, nrow = 2, ncol = 2)
+class(X)
+L <- list("First Component" = matrix(1:8, nrow = 4, ncol = 2), "Last Component" = c(1, 7, 4, 3))
+with(L, 'Last Component')
+with(L, "Last Component")
+```
+
+```{r}
+parks_mat <- cbind(c(62, 71, 66), c(115, 201, 119), c(4000, NA, 2000))
+rownames(parks_mat) <- c("Leslie", "Ron", "April")
+colnames(parks_mat) <- c("Height", "Weight", "Income")
+parks_mat[, "Height"]
+```
+
+```{r}
+library("MASS")
+Boston
+```
+
+```{r}
+A <- matrix(1:6, nrow = 3, ncol = 2)
+B <- c(1, 2)
+
+A %*% B
+A
+B
+```
+
+##Free Response Practice for Midterm 2
+
+###Number 1: NA column counts
+
+```{r}
+na_col_counts <- function(x) {
+  result <- numeric(length(x))
+  for(n in seq_len(length(x))) {
+    for(i in seq_len(length(x[[n]]))) {
+      if(is.na(x[[n]][i])) {
+        result[n] <- result[n] + 1
+      }
+    }
+  }
+  result
+}
+library("MASS")
+Cars93
+na_col_counts(Cars93)
+##Would this be ok???
+```
+
+##Number 2: Making each column of a matrix a unit vector
+
+```{r}
+unitize_mat <- function(X) {
+  result <- matrix(0, nrow = nrow(X), ncol = ncol(X))
+  for(n in seq_len(ncol(X))) {
+    bottom <- sqrt(sum((X[, n])^2))
+    for(i in seq_len(nrow(X))) {
+      result[i, n] <- X[i, n] / bottom
+    }
+  }
+  result
+}
+A <- cbind(c(1, 2, 3), c(1, 2, 3), c(1, 2, 3))
+unitize_mat(A)
+sqrt(1 + 4 + 9)
+c(1, 2, 3) / sqrt(1 + 4 + 9)
+```
+
+##Number 3: Convert Adjancency Matrix to Adjacency List
+
+```{r}
+result <- list(length(4))
+result[[1]] <- 3
+result
+adj_list <- function(X) {
+  result <- list()
+  for(j in seq_len(ncol(X))) {
+    we_cool <- numeric(0)
+    for(i in seq_len(nrow(X))) {
+      if(!is.na(X[i, j])) {
+      if(X[i, j] == 1) {
+        we_cool <- c(we_cool, i)
+      }
+      }
+    }
+    result[[j]] <- we_cool
+  }
+  result
+}
+A <- cbind(c(NA, 1, 0, 1), c(1, NA, 1, 0), c(0, 1, NA, 1), c(1, 0, 1, NA))
+adj_list(A)
+##Figure out
+##Got it (thumbs up)
+```
+
+##Number 4: Counting Fevers and putting them in a List
+
+```{r}
+fever_fn <- function(x) {
+  result <- list()
+  fever_names <- character(length(x))
+  fever_count <- 0
+  normal_count <- 0
+  for(n in seq_len(length(x))) {
+    if(x[n] < 100.4) {
+       fever_names[n] <- "normal"
+       normal_count <- normal_count + 1
+    } else {
+      fever_names[n] <- "fever"
+      fever_count <- fever_count + 1
+    }
+  }
+  table_name <- levels(as.factor(x))
+  table_values <- numeric(length(table_name))
+  for(i in seq_len(length(table_name))) {
+    table_values[i] <- length(as.factor(x)[as.factor(x) == table_name[i]])
+  }
+    result$Child_Fever <- x
+      names(result$Child_Fever) <- fever_names
+    result$Table <- table_values
+      names(result$Table) <- table_name
+    result$Normal_Count <- normal_count
+    result$Fever_Count <- fever_count
+    result
+}
+fever_fn(c(96, 102, 97.8, 99.5, 100, 101, 103, 100, 96, 99.5, 96, 102, 104, 96, 102, 97.8, 99.5, 100, 101, 103, 100, 97, 99.5, 97, 102, 103))
+```
+
+##Answers
+
+```{r}
+##### Sample Exam 2
+##### Free Response Solutions
+##### Written by Michael Tsiang
+##### NOT TO BE POSTED OR SHARED ANYWHERE
+
+##### Question 1
+
+na_col_counts <- function(df) {
+  na_counter <- function(x) {
+    sum(is.na(x))
+  }
+  vapply(df, na_counter, numeric(1))
+}
+
+na_col_counts2 <- function(df) {
+  vapply(df, function(x) {
+    sum(is.na(x))
+  }, numeric(1))
+}
+
+library(MASS)
+na_col_counts(Cars93)
+na_col_counts2(Cars93)
+
+
+##### Question 2
+
+unitize_mat <- function(mat) {
+  unitize <- function(v) {
+    v / sqrt(sum(v^2))
+  }
+  apply(mat, 2, unitize)
+}
+
+unitize_mat2 <- function(mat) {
+  apply(mat, 2, function(v) {
+    v / sqrt(sum(v^2))
+  })
+}
+
+trees_unit <- unitize_mat(trees)
+
+magnitude <- function(v) {
+  sqrt(sum(v^2))
+}
+
+apply(trees, 2, magnitude)
+apply(trees_unit, 2, magnitude)
+
+
+##### Question 3
+
+# The predicate function is not necessary, but it is helpful
+# to ensure that the input matrix is an adjacency matrix.
+
+is_adj_mat <- function(mat) {
+  is_square <- nrow(mat) == ncol(mat)
+  if (!is_square) {
+    stop("Not a square matrix")
+  }
+  sym <- matrix(, nrow(mat), ncol(mat))
+  for (i in seq_len(nrow(mat))) {
+    for (j in seq_len(ncol(mat))) {
+      if (i != j) {
+        sym[i, j] <- mat[i, j] == mat[j, i]
+      } else {
+        sym[i, j] <- is.na(mat[i, j])
+      }
+    }
+  }
+  vals <- levels(as.factor(mat))
+  is_adj <- all(vals == c("0", "1")) || vals == "0" || vals == "1"
+  is_square && all(sym) && is_adj
+}
+
+adj_list <- function(mat) {
+  if (!is_adj_mat(mat)) {
+    stop("Not an adjacency matrix")
+  }
+  out_list <- list()
+  for (i in seq_len(nrow(mat))) {
+    out_list[[i]] <- which(mat[i, ] == 1)
+  }
+  out_list
+}
+
+adj_list2 <- function(mat) {
+  if (!is_adj_mat(mat)) {
+    stop("Not an adjacency matrix")
+  }
+  mat_df <- as.data.frame(mat)
+  out_list <- lapply(mat_df, function(x) {
+    which(x == 1)
+  })
+  names(out_list) <- NULL
+  out_list
+}
+
+adj_mat <- cbind(
+  c(NA, 1, 0, 1), c(1, NA, 1, 0),
+  c(0, 1, NA, 1), c(1, 0, 1, NA)
+)
+adj_list(adj_mat)
+adj_list2(adj_mat)
+
+
+##### Question 4
+
+fever_fn <- function(x) {
+  threshold <- 100.4
+  fever <- x > threshold
+  names(x)[!fever] <- "normal"
+  names(x)[fever] <- "fever"
+  list(
+    "Child_Fever" = x,
+    "Table" = table(x),
+    "Normal_Count" = sum(!fever),
+    "Fever_Count" = sum(fever)
+  )
+}
+
+child_temps <- c(
+  96, 102, 97.8, 99.5, 100, 101, 103, 100,
+  96, 99.5, 96, 102, 104, 96, 102, 97.8, 99.5,
+  100, 101, 103, 100, 97, 99.5, 97, 102, 103
+)
+
+fever_fn(child_temps)
+
+```
+
+###got them all right technically, but not ideal solutions -> USE APPLY FUNCTIONS MORE/GET THE HANG OF THEM
+
+```{r}
+X <- matrix(1:100, nrow = 20, ncol = 5)
+X[c(1, 4, 5, 19), 4]
+X
+A <- matrix(1:6, nrow = 3, ncol = 2)
+B <- matrix(1:6, nrow = 2, ncol = 3)
+A %*% B
+colSums(A)
+rowSums(A)
+colSums(B)
+rowSums(B)
+y <- factor(c(1, 2, 3, 2, 3, 1, 2, 3, 1, 2, 3, 2, 3, 2, 3, 2, 3, 1, 1, 1, 1, 2, 3, 3, 5))
+y
+table(y)
+y[5:10, drop = TRUE]
+row(A)
+order(A)
+rank(A)
+z <- data.frame(list(c(1, 2, 3), c(5, 4, 3), c(3, 2, 7)), rownames = c("y", "u", "do"))
+z[1, 2]
+z
+L <- list(matrix(1:4, nrow = 2, ncol = 2), c(2, 3, 5, 7), c("Yuh", "duh"))
+L[[c(2, 3)]]
+L
+str(L)
+lapply(L, mean)
+sapply(L, mean)
+vapply(L, mean, numeric(1))
+```
+
+```{r}
+x <- c(0, 1, 2, 3, 4, 5, 1, 1, 2, 3, 1, 0, 2, 3, 1, 5)
+y <- as.factor(x)
+y + 1
+```
+
+##Acne Severity Data for at home vs. at UCLA
+
+```{r}
+#acne_data <- data.frame("Date" = c(000000, 000000, 000000, 120723), "Location" = c("Fremont", "UCLA", "Fremont", "UCLA"), "Count" = c(0, 0, 0, 2), "Severity" = c("None", "Severe", "Moderate", "Mild"), stringsAsFactors = TRUE)
+##acne_data
+#add_datapoint_acne_data <- function(date, location, count, severity) {
+#  new_row <- list(date, location, count, severity)
+#  rbind(acne_data, new_row) 
+#}
+#acne_data <- add_datapoint_acne_data(120823, "Fremont", 5, "Severe")
+#acne_data ##works now!!
+##delete 1st 3 rows
+#acne_data <- acne_data[4, ]
+#acne_data
+#levels(acne_data$Location)
+#levels(acne_data$Severity) ##yayyy okay all set up now
+#acne_data <- add_datapoint_acne_data(120823, "UCLA", 3, "Mild")
+##cancel out each entry after you do it, no need to rerun every time
+#acne_data <- add_datapoint_acne_data(121023, "UCLA", 2, "Moderate")
+#acne_data <- add_datapoint_acne_data(121123, "UCLA", 2, "Moderate")
+##acne_data <- add_datapoint_acne_data(121223, "UCLA", 1, "Mild") ##Ahhhh R final
+#acne_data <- add_datapoint_acne_data(121323, "UCLA", 2, "Mild")
+
+```
+
+##Stats 20 grade prediction estimate
+
+```{r}
+stats_20_grade <- function(homework, quizzes, exam1, exam2, exam3, discussion, campuswire) {
+  homework <- mean(homework)
+  quizzes <- mean(quizzes[-(quizzes == min(quizzes))])
+  if(exam1 > exam2) {
+    final_grade <- 0.15 * homework + 0.1 * quizzes + 0.25 * exam1 + 0.15 * exam2 + 0.3 * exam3 + 0.03 * discussion + 0.02 * campuswire
+  } else {
+    final_grade <- 0.15 * homework + 0.1 * quizzes + 0.15 * exam1 + 0.25 * exam2 + 0.3 * exam3 + 0.03 * discussion + 0.02 * campuswire
+  }
+  final_grade
+}
+stats_20_grade(100, c(100, 71, 75, 78, 100, 71, 71, 86, 90), 89.36, 90.59, 90, 100, 25) ##90% should be goal I guess, but aim for 100 of course
+```
+
+```{r}
+library(caret)
+```
+
+```{r}
+#final_dataset <- final_dataset[-29, ]
+final_dataset
+#From 101a final project
+```
+
+```{r}
+cv_model <- train(Time ~ ., data = final_dataset, method = "lm", trControl = trainControl(method = "cv", number = 10))
+```
+
+```{r}
+summary(cv_model)
+```
+
